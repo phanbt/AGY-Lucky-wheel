@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="day">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lucky Draw — Interactive Spin Wheel</title>
+  <meta name="description" content="A responsive Lucky Draw spinning wheel game for laptop and smartphone. Enter participant names, spin to pick and remove winners, and switch between Day and Night modes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 3v9l6.5 3.8"></path>
+            <path d="M12 12L5.5 15.8"></path>
+            <circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Lucky Draw</h1>
+          <p class="brand-subtitle">Spin the wheel, crown each winner, down to the final two</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="soundToggleBtn" type="button" class="icon-toggle icon-toggle--square" aria-label="Toggle sound effects" aria-pressed="true" title="Sound effects on">
+          <svg id="soundOnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg id="soundOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <button id="themeToggleBtn" type="button" class="icon-toggle" aria-label="Switch between Day and Night mode" aria-pressed="false">
+          <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+          <span id="themeLabel">Day</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <!-- Wheel Stage -->
+      <section class="stage-card" aria-label="Spinning Wheel Stage">
+        <div class="stage-meta">
+          <div class="stat-strip">
+            <span class="stat-item"><strong id="remainingCount">0</strong> on wheel</span>
+            <span class="stat-item"><strong id="winnerCount">0</strong> winners</span>
+          </div>
+          <span id="statusPill" class="status-pill" data-state="setup">Ready for names</span>
+        </div>
+
+        <div class="wheel-wrap">
+          <canvas id="wheelCanvas" aria-label="Lucky draw spinning wheel" role="img"></canvas>
+        </div>
+
+        <div id="spotlight" class="spotlight" role="status" aria-live="polite">
+          <div class="spotlight-content">
+            <span id="spotlightLabel" class="spotlight-label">Gamemaster Guide</span>
+            <span id="spotlightText" class="spotlight-text">Enter at least 2 names to spin the wheel.</span>
+          </div>
+          <button id="viewWinnersInlineBtn" type="button" class="btn btn-secondary btn-sm spotlight-action" hidden>
+            View Winners
+          </button>
+        </div>
+
+        <div class="controls-group">
+          <button id="spinBtn" type="button" class="btn btn-spin" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+              <polyline points="22 4 21 12 13 11"></polyline>
+            </svg>
+            <span id="spinBtnLabel">Spin the Wheel</span>
+          </button>
+
+          <div class="secondary-controls">
+            <button id="stopBtn" type="button" class="btn btn-stop" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+              </svg>
+              <span>Stop</span>
+            </button>
+
+            <button id="replayBtn" type="button" class="btn btn-secondary" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>Replay</span>
+            </button>
+
+            <button id="resetBtn" type="button" class="btn btn-danger-ghost" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 6h18"></path>
+                <path d="M8 6V4h8v2"></path>
+                <path d="M19 6l-1 14H6L5 6"></path>
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gamemaster Roster & Winners Panel -->
+      <aside class="side-panel" aria-label="Participants and Winners">
+        <div class="panel-tabs" role="tablist">
+          <button id="tabParticipants" type="button" role="tab" aria-selected="true" aria-controls="panelParticipants" class="tab-btn is-active">
+            <span>Names</span>
+            <span id="tabParticipantsCount" class="count-badge">0</span>
+          </button>
+          <button id="tabWinners" type="button" role="tab" aria-selected="false" aria-controls="panelWinners" class="tab-btn">
+            <span>Winners</span>
+            <span id="tabWinnersCount" class="count-badge">0</span>
+          </button>
+        </div>
+
+        <!-- Participants Tab -->
+        <div id="panelParticipants" class="panel-body" role="tabpanel" aria-labelledby="tabParticipants">
+          <form id="addNamesForm" class="entry-form">
+            <div class="field-label">
+              <label for="namesInput">Enter participant names</label>
+              <button id="loadSampleBtn" type="button" class="sample-link">Load sample</button>
+            </div>
+            <textarea
+              id="namesInput"
+              class="names-input"
+              placeholder="One name per line or separated by commas&#10;e.g.&#10;Maya, Liam, Sofia, Noah"
+              autocomplete="off"
+              spellcheck="false"
+            ></textarea>
+            <div class="entry-actions">
+              <span class="input-hint">Line breaks or commas</span>
+              <button id="addNamesBtn" type="submit" class="btn btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Add to Wheel</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="roster-header">
+            <span id="rosterTitle">On the wheel (0)</span>
+            <button id="shuffleBtn" type="button" class="sample-link" hidden>Shuffle</button>
+          </div>
+
+          <ul id="rosterList" class="roster-list" aria-label="Remaining participants"></ul>
+          <div id="rosterEmpty" class="empty-state">
+            <strong>No names yet</strong>
+            Add at least 2 names above to populate the lucky draw wheel.
+          </div>
+        </div>
+
+        <!-- Winners Tab -->
+        <div id="panelWinners" class="panel-body" role="tabpanel" aria-labelledby="tabWinners" hidden>
+          <div class="winners-toolbar">
+            <span id="winnersPanelHeading" class="field-label">Draw order</span>
+            <button id="copyWinnersBtn" type="button" class="btn btn-secondary btn-sm" hidden>Copy List</button>
+          </div>
+
+          <ol id="winnersList" class="winners-list" aria-label="Winners in draw order"></ol>
+          <div id="winnersEmpty" class="empty-state">
+            <strong>No winners drawn yet</strong>
+            Hit Spin the Wheel to crown your first winner.
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Stopped / Completed Winners Summary Modal -->
+  <div id="resultsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 id="modalTitle" class="modal-title">Winners List</h2>
+          <p id="modalSubtitle" class="modal-subtitle">Game stopped</p>
+        </div>
+        <button id="modalCloseBtn" type="button" class="modal-close" aria-label="Close winners dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div id="finalTwoCallout" class="final-callout" hidden>
+          <div class="final-box final-box--before">
+            <span class="final-box-label">Before Last Winner</span>
+            <span id="beforeLastName" class="final-box-name">—</span>
+          </div>
+          <div class="final-box final-box--last">
+            <span class="final-box-label">Last Winner</span>
+            <span id="lastWinnerName" class="final-box-name">—</span>
+          </div>
+        </div>
+
+        <ol id="modalWinnersList" class="winners-list"></ol>
+        <div id="modalEmptyWinners" class="empty-state" hidden>
+          <strong>No winners were drawn</strong>
+          Replay or add names to start a new lucky draw.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="modalCopyBtn" type="button" class="btn btn-secondary" hidden>Copy Winners</button>
+        <button id="modalResumeBtn" type="button" class="btn btn-secondary" hidden>Continue</button>
+        <button id="modalReplayBtn" type="button" class="btn btn-spin">Replay</button>
+        <button id="modalResetBtn" type="button" class="btn btn-danger-ghost">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
