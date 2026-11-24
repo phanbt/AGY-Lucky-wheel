@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="day">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>3DEXPERIENCE Basic Knowledge Quiz — 105 Questions</title>
+  <meta name="description" content="Test your 3DEXPERIENCE platform knowledge across 105 curated questions. Earn a medal for every right answer and use your single-use 50/50 and Ask the 3DEXPERIENCE Champion jokers wisely." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <!-- Stylized 3DCompass Emblem -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9.5"></circle>
+            <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"></path>
+            <polygon points="10 8.8 15.8 12 10 15.2 10 8.8" fill="currentColor" stroke="none"></polygon>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">3DEXPERIENCE Quiz</h1>
+          <p class="brand-subtitle">Basic Knowledge Challenge &middot; 105-Question Bank</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div id="headerMedalBadge" class="medal-hud" aria-live="polite" title="Total medals earned in current game">
+          <svg class="medal-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8.5 2h7l-1.8 6.5h-3.4L8.5 2Z" fill="#2563EB" />
+            <circle cx="12" cy="14.5" r="7" fill="#F5B731" stroke="#B4690E" stroke-width="1.5" />
+            <path d="M12 10.6l1.15 2.33 2.57.37-1.86 1.81.44 2.56L12 16.46l-2.3 1.21.44-2.56-1.86-1.81 2.57-.37L12 10.6Z" fill="#FFFBEB" />
+          </svg>
+          <span id="headerMedalCount" class="medal-hud-count">0</span>
+          <span class="medal-hud-label">Medals</span>
+        </div>
+
+        <button id="soundToggleBtn" type="button" class="icon-toggle icon-toggle--square" aria-label="Toggle sound effects" aria-pressed="true" title="Sound effects on">
+          <svg id="soundOnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg id="soundOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <button id="themeToggleBtn" type="button" class="icon-toggle" aria-label="Switch between Day and Night mode" aria-pressed="false">
+          <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+          <span id="themeLabel">Day</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-stage">
+      <!-- ==================== START SCREEN ==================== -->
+      <section id="startScreen" class="panel start-panel" aria-label="Quiz Setup">
+        <div class="start-hero">
+          <div class="hero-emblem" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2.5" opacity="0.22" />
+              <path d="M24 3v7M24 38v7M3 24h7M38 24h7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+              <circle cx="24" cy="24" r="10.5" fill="currentColor" opacity="0.12" />
+              <polygon points="21 17.5 32 24 21 30.5 21 17.5" fill="currentColor" />
+            </svg>
+          </div>
+          <h2 class="start-heading">Master the 3DEXPERIENCE Platform</h2>
+          <p class="start-lead">
+            Challenge yourself with <strong id="dbTotalCount">105</strong> curated questions spanning 3DCompass, 3DDashboard, 3DSwym, 3DDrive, 3DSpace, 6WTags, Lifecycle, 3DPlay, Change Management, and Brands.
+          </p>
+        </div>
+
+        <div class="rules-strip" aria-label="Game Rules">
+          <div class="rule-item">
+            <span class="rule-icon rule-icon--gold" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="14" r="6"></circle>
+                <path d="M9 2h6l-1.5 6h-3L9 2Z"></path>
+              </svg>
+            </span>
+            <div>
+              <strong>1 Medal per Correct Answer</strong>
+              <p>Every right answer awards a gleaming gold medal to your collection.</p>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-icon rule-icon--blue" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="5" x2="5" y2="19"></line>
+                <circle cx="6.5" cy="6.5" r="2.5"></circle>
+                <circle cx="17.5" cy="17.5" r="2.5"></circle>
+              </svg>
+            </span>
+            <div>
+              <strong>50/50 Joker (1&times; per game)</strong>
+              <p>Eliminates 2 wrong answers, leaving only 2 choices on the board.</p>
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-icon rule-icon--amber" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l2.4 4.86 5.36.78-3.88 3.78.92 5.34L12 14.24l-4.8 2.52.92-5.34L4.24 7.64l5.36-.78L12 2Z"></path>
+              </svg>
+            </span>
+            <div>
+              <strong>Ask the 3DEXPERIENCE Champion (1&times;)</strong>
+              <p>Call on a certified platform expert for a live tip and recommendation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-controls">
+          <div class="setup-group">
+            <label class="setup-label" for="topicSelect">Topic Focus</label>
+            <select id="topicSelect" class="select-input">
+              <option value="ALL">All 10 Categories (105 Questions)</option>
+            </select>
+          </div>
+
+          <div class="setup-group">
+            <span class="setup-label">Session Length</span>
+            <div id="lengthPicker" class="segmented-control" role="radiogroup" aria-label="Number of questions">
+              <button type="button" class="seg-btn" data-length="15" aria-checked="false" role="radio">15 Qs</button>
+              <button type="button" class="seg-btn" data-length="30" aria-checked="false" role="radio">30 Qs</button>
+              <button type="button" class="seg-btn" data-length="50" aria-checked="false" role="radio">50 Qs</button>
+              <button type="button" class="seg-btn is-active" data-length="105" aria-checked="true" role="radio">All 105</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="start-actions">
+          <button id="startQuizBtn" type="button" class="btn btn-primary btn-lg">
+            <span>Start Quiz</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== ACTIVE QUIZ SCREEN ==================== -->
+      <section id="quizScreen" class="panel quiz-panel" aria-label="Quiz Question Stage" hidden>
+        <!-- Top Status & Progress -->
+        <div class="quiz-topbar">
+          <div class="quiz-meta-left">
+            <span id="questionCounter" class="question-counter">Question 1 of 105</span>
+            <span id="categoryChip" class="category-chip">Platform &amp; 3DCompass</span>
+          </div>
+          <div class="quiz-meta-right">
+            <span id="streakBadge" class="streak-badge" hidden>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+              <span id="streakCount">0</span> streak
+            </span>
+            <span id="accuracyChip" class="accuracy-chip">0 answered</span>
+          </div>
+        </div>
+
+        <div class="progress-track" aria-hidden="true">
+          <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+        </div>
+
+        <!-- Jokers Bar -->
+        <div class="jokers-bar" role="region" aria-label="Special Jokers">
+          <span class="jokers-label">Jokers (1&times; each):</span>
+          <div class="jokers-buttons">
+            <button id="joker5050Btn" type="button" class="joker-btn joker-btn--fifty" aria-describedby="joker5050Status">
+              <span class="joker-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="5" x2="5" y2="19"></line>
+                  <circle cx="6.5" cy="6.5" r="2.5"></circle>
+                  <circle cx="17.5" cy="17.5" r="2.5"></circle>
+                </svg>
+              </span>
+              <span class="joker-text">50/50</span>
+              <span id="joker5050Status" class="joker-badge">Available</span>
+            </button>
+
+            <button id="jokerChampionBtn" type="button" class="joker-btn joker-btn--champion" aria-describedby="jokerChampionStatus">
+              <span class="joker-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2l2.4 4.86 5.36.78-3.88 3.78.92 5.34L12 14.24l-4.8 2.52.92-5.34L4.24 7.64l5.36-.78L12 2Z"></path>
+                </svg>
+              </span>
+              <span class="joker-text">Ask the 3DEXPERIENCE Champion</span>
+              <span id="jokerChampionStatus" class="joker-badge">Available</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Text -->
+        <div class="question-block">
+          <h2 id="questionText" class="question-text">Loading question...</h2>
+        </div>
+
+        <!-- Ask the 3DEXPERIENCE Champion Advice Panel -->
+        <aside id="championCard" class="champion-card" role="status" aria-live="polite" hidden>
+          <div class="champion-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M5 20a7 7 0 0 1 14 0"></path>
+            </svg>
+          </div>
+          <div class="champion-body">
+            <div class="champion-header">
+              <strong>3DEXPERIENCE Champion</strong>
+              <span id="championConfidence" class="champion-confidence">96% Confident</span>
+            </div>
+            <p id="championAdviceText" class="champion-advice"></p>
+            <div class="champion-pick">
+              Recommended Answer: <strong id="championPickLetter">A</strong>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 4 Answer Choices -->
+        <div id="optionsGrid" class="options-grid" role="group" aria-label="Answer choices">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Feedback & Explanation Panel -->
+        <div id="feedbackPanel" class="feedback-panel" role="status" aria-live="polite" hidden>
+          <div class="feedback-main">
+            <div class="feedback-title-row">
+              <span id="feedbackIcon" class="feedback-icon" aria-hidden="true"></span>
+              <strong id="feedbackHeadline" class="feedback-headline"></strong>
+              <span id="medalEarnedPill" class="medal-earned-pill" hidden>+1 Medal Earned</span>
+            </div>
+            <p id="feedbackExplanation" class="feedback-explanation"></p>
+          </div>
+          <button id="nextQuestionBtn" type="button" class="btn btn-primary">
+            <span id="nextQuestionLabel">Next Question</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Live Medal Ribbon Shelf -->
+        <div class="medal-shelf" aria-label="Earned Medals">
+          <div class="medal-shelf-header">
+            <span class="medal-shelf-title">Medal Collection</span>
+            <span id="medalShelfCounter" class="medal-shelf-count">0 medals earned</span>
+          </div>
+          <div id="medalShelfIcons" class="medal-shelf-icons">
+            <span class="medal-shelf-empty">Answer your first question correctly to earn your first gold medal.</span>
+          </div>
+        </div>
+
+        <!-- Game Action Footer: Stop & Restart -->
+        <div class="game-footer">
+          <span class="keyboard-hint">Tip: Press <kbd>A</kbd>–<kbd>D</kbd> or <kbd>1</kbd>–<kbd>4</kbd> to answer, <kbd>Enter</kbd> for next</span>
+          <div class="game-footer-actions">
+            <button id="stopGameBtn" type="button" class="btn btn-stop">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+              </svg>
+              <span>Stop Game</span>
+            </button>
+            <button id="restartGameBtn" type="button" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>Restart Game</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== END-OF-GAME SUMMARY SCREEN ==================== -->
+      <section id="summaryScreen" class="panel summary-panel" aria-label="Quiz Results Summary" hidden>
+        <div class="summary-hero">
+          <span id="summaryStatusTag" class="summary-status-tag">Quiz Completed</span>
+          <div class="summary-medal-showcase">
+            <div class="big-medal-emblem" aria-hidden="true">
+              <svg viewBox="0 0 80 80" fill="none">
+                <path d="M27 6h26l-6.5 22h-13L27 6Z" fill="#005386" />
+                <path d="M33 6h14l-3 22h-8L33 6Z" fill="#38BDF8" opacity="0.45" />
+                <circle cx="40" cy="49" r="24" fill="#F5B731" stroke="#B4690E" stroke-width="3" />
+                <circle cx="40" cy="49" r="18.5" fill="none" stroke="#FEF08A" stroke-width="1.5" stroke-dasharray="3 3" />
+                <path d="M40 36l3.9 7.9 8.7 1.27-6.3 6.14 1.49 8.69L40 55.9l-7.79 4.1 1.49-8.69-6.3-6.14 8.7-1.27L40 36Z" fill="#FFFBEB" />
+              </svg>
+            </div>
+            <div class="summary-medal-numbers">
+              <div id="finalMedalCount" class="final-medal-count">0</div>
+              <div id="finalMedalWord" class="final-medal-word">Medals Earned</div>
+            </div>
+          </div>
+
+          <h2 id="summaryRankTitle" class="summary-rank-title">3DEXPERIENCE Explorer</h2>
+          <p id="summarySubtitle" class="summary-subtitle"></p>
+        </div>
+
+        <div class="summary-stats-grid">
+          <div class="summary-stat">
+            <span class="summary-stat-label">Answered</span>
+            <strong id="statAnswered" class="summary-stat-value">0 / 105</strong>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Accuracy</span>
+            <strong id="statAccuracy" class="summary-stat-value">0%</strong>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Best Streak</span>
+            <strong id="statStreak" class="summary-stat-value">0</strong>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Jokers Used</span>
+            <strong id="statJokers" class="summary-stat-value">0 / 2</strong>
+          </div>
+        </div>
+
+        <!-- Final Medal Wall -->
+        <div id="summaryMedalWall" class="summary-medal-wall" hidden></div>
+
+        <!-- Category Performance Breakdown -->
+        <div id="categoryBreakdownWrap" class="breakdown-section" hidden>
+          <h3 class="section-subtitle">Performance by Category</h3>
+          <div id="categoryBreakdownList" class="breakdown-list"></div>
+        </div>
+
+        <!-- Review Answered Questions -->
+        <details id="reviewDetails" class="review-details" hidden>
+          <summary class="review-summary-toggle">Review Answered Questions (<span id="reviewCount">0</span>)</summary>
+          <ol id="reviewList" class="review-list"></ol>
+        </details>
+
+        <div class="summary-actions">
+          <button id="summaryRestartBtn" type="button" class="btn btn-primary btn-lg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>Restart Game</span>
+          </button>
+          <button id="summarySetupBtn" type="button" class="btn btn-secondary btn-lg">
+            <span>Change Quiz Settings</span>
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer" aria-label="Copyright">
+    © 2026 PHAN Bá Thông - Phanomenon Mindset Pte Ltd
+  </footer>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
